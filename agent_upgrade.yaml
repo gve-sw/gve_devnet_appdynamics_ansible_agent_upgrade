@@ -1,0 +1,24 @@
+---
+- hosts: all
+  tasks:
+    - name: Include variables for the controller settings
+      include_vars: vars/controller.yaml
+    - include_role:
+        name: appdynamics.agents.java
+        # use java role variables in the following instrumentation tasks when public: yes
+        public: yes
+      vars:
+        agent_version: 21.11.2
+        agent_type: java
+
+
+    - include_role:
+        name: appdynamics.agents.instrument_tomcat
+      vars:
+      # instrument tomcat:
+        tomcat_service: tomcat7
+        application_name: "APPLICATION NAME"
+        tier_name: "TEST"
+        app_user: USERNAME
+        restart_app: yes
+        tomcat_config: /usr/local/apache/apache-tomcat-7/bin/setenv.sh
